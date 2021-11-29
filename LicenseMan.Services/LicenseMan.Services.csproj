@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LicenseMan.Entity\LicenseMan.LicenseEntity.csproj" />
+    <ProjectReference Include="..\LicenseMan.GeneralPersistence\LicenseMan.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
