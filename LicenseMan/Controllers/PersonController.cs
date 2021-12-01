@@ -29,13 +29,13 @@ namespace LicenseMan.Controllers
 		[HttpGet]
 		public IActionResult Create()
 		{
-			var model = new PersonCreateViewModel();
+			var model = new PersonEditViewModel();
 			return View(model);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(PersonCreateViewModel model)
+		public async Task<IActionResult> Create(PersonEditViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -56,7 +56,7 @@ namespace LicenseMan.Controllers
 		public IActionResult Edit(int id)
 		{
 			var person = personService.GetById(id);
-			if(person == null)
+			if (person == null)
 				return NotFound();
 
 			var model = new PersonEditViewModel
@@ -80,7 +80,7 @@ namespace LicenseMan.Controllers
 				if (person == null)
 					return NotFound();
 
-				
+
 				person.Name = model.Name,
 				person.Role = model.Role,
 				person.Department = model.Department
@@ -89,6 +89,46 @@ namespace LicenseMan.Controllers
 				return RedirectToAction(nameof(Index));
 			}
 			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Detail(int Id)
+		{
+			var person = personService.GetById(Id);
+			if (person == null)
+				return NotFound();
+
+			PersonDetailViewModel model = new PersonDetailViewModel
+			{
+				Id = person.Id,
+				Name = person.Name,
+				Role = person.Role,
+				Department = person.Department
+			};
+
+			return View(model);
+		}
+
+		[HttpGet]
+		public IActionResult Delete(int id)
+		{
+			var person = personService.GetById(id);
+			if (person == null)
+				return NotFound();
+
+			var model = new PersonDeleteViewModel
+			{
+				Id = person?.Id,
+				Name = person?.Name
+			};
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(PersonDeleteViewModel model)
+		{
+			await personService.Delete(model.Id);
+			return RedirectToAction(nameof(Index));
 		}
 	}
 }
