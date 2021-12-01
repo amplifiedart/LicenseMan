@@ -118,8 +118,8 @@ namespace LicenseMan.Controllers
 
 			var model = new PersonDeleteViewModel
 			{
-				Id = person?.Id,
-				Name = person?.Name
+				Id = person.Id,
+				Name = person.Name
 			};
 		}
 
