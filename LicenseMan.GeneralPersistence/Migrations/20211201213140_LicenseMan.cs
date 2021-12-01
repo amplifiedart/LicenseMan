@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LicenseMan.Persistence.Migrations
 {
-    public partial class LicenseMigration : Migration
+    public partial class LicenseMan : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -256,7 +256,8 @@ namespace LicenseMan.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Items",
+                name: "LicenseItem",
+                schema: "Collector",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -271,9 +272,9 @@ namespace LicenseMan.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.PrimaryKey("PK_LicenseItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_LicensePackage_LicensePackageId",
+                        name: "FK_LicenseItem_LicensePackage_LicensePackageId",
                         column: x => x.LicensePackageId,
                         principalSchema: "Collector",
                         principalTable: "LicensePackage",
@@ -281,7 +282,8 @@ namespace LicenseMan.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "Address",
+                schema: "General",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -293,34 +295,12 @@ namespace LicenseMan.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.PrimaryKey("PK_Address", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Assignments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustodianPersonId = table.Column<int>(type: "int", nullable: true),
-                    LicenseId = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateReturned = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Assignments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Assignments_Items_LicenseId",
-                        column: x => x.LicenseId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Departments",
+                name: "Department",
+                schema: "General",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -332,7 +312,7 @@ namespace LicenseMan.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.PrimaryKey("PK_Department", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -357,16 +337,49 @@ namespace LicenseMan.Persistence.Migrations
                         principalTable: "Contact",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Person_Departments_DepartmentId",
+                        name: "FK_Person_Department_DepartmentId",
                         column: x => x.DepartmentId,
-                        principalTable: "Departments",
+                        principalSchema: "General",
+                        principalTable: "Department",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "LicenseAssignment",
+                schema: "Collector",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustodianPersonId = table.Column<int>(type: "int", nullable: true),
+                    LicenseId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateReturned = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LicenseAssignment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LicenseAssignment_LicenseItem_LicenseId",
+                        column: x => x.LicenseId,
+                        principalSchema: "Collector",
+                        principalTable: "LicenseItem",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LicenseAssignment_Person_CustodianPersonId",
+                        column: x => x.CustodianPersonId,
+                        principalSchema: "General",
+                        principalTable: "Person",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_PersonId",
-                table: "Addresses",
+                name: "IX_Address_PersonId",
+                schema: "General",
+                table: "Address",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
@@ -409,29 +422,28 @@ namespace LicenseMan.Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assignments_CustodianPersonId",
-                table: "Assignments",
-                column: "CustodianPersonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Assignments_LicenseId",
-                table: "Assignments",
-                column: "LicenseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_DepartmentDeputyPersonId",
-                table: "Departments",
+                name: "IX_Department_DepartmentDeputyPersonId",
+                schema: "General",
+                table: "Department",
                 column: "DepartmentDeputyPersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Departments_DepartmentHeadPersonId",
-                table: "Departments",
+                name: "IX_Department_DepartmentHeadPersonId",
+                schema: "General",
+                table: "Department",
                 column: "DepartmentHeadPersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_LicensePackageId",
-                table: "Items",
-                column: "LicensePackageId");
+                name: "IX_LicenseAssignment_CustodianPersonId",
+                schema: "Collector",
+                table: "LicenseAssignment",
+                column: "CustodianPersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LicenseAssignment_LicenseId",
+                schema: "Collector",
+                table: "LicenseAssignment",
+                column: "LicenseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LicenseCollection_LicenseContractId",
@@ -444,6 +456,12 @@ namespace LicenseMan.Persistence.Migrations
                 schema: "Collector",
                 table: "LicenseCollection",
                 column: "VendorContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LicenseItem_LicensePackageId",
+                schema: "Collector",
+                table: "LicenseItem",
+                column: "LicensePackageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LicensePackage_LicenseCollectionId",
@@ -470,8 +488,9 @@ namespace LicenseMan.Persistence.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Addresses_Person_PersonId",
-                table: "Addresses",
+                name: "FK_Address_Person_PersonId",
+                schema: "General",
+                table: "Address",
                 column: "PersonId",
                 principalSchema: "General",
                 principalTable: "Person",
@@ -479,24 +498,18 @@ namespace LicenseMan.Persistence.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Assignments_Person_CustodianPersonId",
-                table: "Assignments",
-                column: "CustodianPersonId",
-                principalSchema: "General",
-                principalTable: "Person",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Departments_Person_DepartmentDeputyPersonId",
-                table: "Departments",
+                name: "FK_Department_Person_DepartmentDeputyPersonId",
+                schema: "General",
+                table: "Department",
                 column: "DepartmentDeputyPersonId",
                 principalSchema: "General",
                 principalTable: "Person",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Departments_Person_DepartmentHeadPersonId",
-                table: "Departments",
+                name: "FK_Department_Person_DepartmentHeadPersonId",
+                schema: "General",
+                table: "Department",
                 column: "DepartmentHeadPersonId",
                 principalSchema: "General",
                 principalTable: "Person",
@@ -506,15 +519,18 @@ namespace LicenseMan.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Departments_Person_DepartmentDeputyPersonId",
-                table: "Departments");
+                name: "FK_Department_Person_DepartmentDeputyPersonId",
+                schema: "General",
+                table: "Department");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Departments_Person_DepartmentHeadPersonId",
-                table: "Departments");
+                name: "FK_Department_Person_DepartmentHeadPersonId",
+                schema: "General",
+                table: "Department");
 
             migrationBuilder.DropTable(
-                name: "Addresses");
+                name: "Address",
+                schema: "General");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -532,7 +548,8 @@ namespace LicenseMan.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Assignments");
+                name: "LicenseAssignment",
+                schema: "Collector");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -541,7 +558,8 @@ namespace LicenseMan.Persistence.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "LicenseItem",
+                schema: "Collector");
 
             migrationBuilder.DropTable(
                 name: "LicensePackage",
@@ -564,7 +582,8 @@ namespace LicenseMan.Persistence.Migrations
                 schema: "General");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "Department",
+                schema: "General");
         }
     }
 }

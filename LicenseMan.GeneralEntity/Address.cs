@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LicenseMan.GeneralEntity
 {
+	[Table("Address", Schema = "General")]
 	public class Address
 	{
 		[Key]

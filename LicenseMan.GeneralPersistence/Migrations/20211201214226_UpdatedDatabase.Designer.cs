@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LicenseMan.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211129205630_License Migration")]
-    partial class LicenseMigration
+    [Migration("20211201214226_UpdatedDatabase")]
+    partial class UpdatedDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,7 +53,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Address", "General");
                 });
 
             modelBuilder.Entity("LicenseMan.GeneralEntity.Contact", b =>
@@ -126,7 +126,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasIndex("DepartmentHeadPersonId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Department", "General");
                 });
 
             modelBuilder.Entity("LicenseMan.GeneralEntity.Person", b =>
@@ -192,7 +192,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasIndex("LicenseId");
 
-                    b.ToTable("Assignments");
+                    b.ToTable("LicenseAssignment", "Collector");
                 });
 
             modelBuilder.Entity("LicenseMan.LicenseEntity.LicenseCollection", b =>
@@ -291,7 +291,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasIndex("LicensePackageId");
 
-                    b.ToTable("Items");
+                    b.ToTable("LicenseItem", "Collector");
                 });
 
             modelBuilder.Entity("LicenseMan.LicenseEntity.LicensePackage", b =>

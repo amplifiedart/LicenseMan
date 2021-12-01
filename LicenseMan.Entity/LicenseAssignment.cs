@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LicenseMan.LicenseEntity
 {
+    [Table("LicenseAssignment", Schema = "Collector")]
     public class LicenseAssignment
     {
         [Key]
