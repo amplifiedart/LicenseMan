@@ -12,7 +12,7 @@ namespace LicenseMan.Services
 		Task CreateAsync(Person newPerson);
 		Person GetById(int id);
 		Task UpdateAsync(Person person);
-		Task UpdateAsync(in id);
+		Task UpdateAsync(int id);
 		Task Delete(int id);
 		IEnumerable<Person> GetAll();
 	}

@@ -1,10 +1,5 @@
 ﻿using LicenseMan.ApplicationPersistence;
 using LicenseMan.GeneralEntity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LicenseMan.Services.Service
 {
@@ -46,7 +41,7 @@ namespace LicenseMan.Services.Service
 			await context.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(int id )
+		public async Task UpdateAsync(int id)
 		{
 			var person = GetById(id);
 			context.Update(person);
