@@ -13,10 +13,14 @@ namespace LicenseMan.GeneralEntity
         [Required, MaxLength(50)]
         public string Role { get; set; }
 
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
 
         [ForeignKey("DepartmentId")]
-        public Department Department { get; set; }
+        public Department? Department { get; set; }
+
+        public int? ContactId { get; set; }
+        [ForeignKey("ContactId")]
+		public Contact Contact { get; set; }
 
 		public IEnumerable<Address> Addresses { get; set; }
 

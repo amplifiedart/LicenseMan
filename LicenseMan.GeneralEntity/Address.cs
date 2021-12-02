@@ -19,7 +19,7 @@ namespace LicenseMan.GeneralEntity
 
 		public int? PersonId { get; set; }
 		[ForeignKey("PersonId")]
-		public Person Person { get; set; }
+		public Person? Person { get; set; }
 
 	}
 }

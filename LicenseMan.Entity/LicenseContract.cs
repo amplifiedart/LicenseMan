@@ -16,6 +16,6 @@ namespace LicenseMan.LicenseEntity
 		public string ContractNumber { get; set; }
 
 		public DateTime StartDate { get; set; }
-        public DateTime ExpiryDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
     }
 }

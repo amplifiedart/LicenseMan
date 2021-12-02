@@ -15,5 +15,6 @@ namespace LicenseMan.Services
 		Task UpdateAsync(int id);
 		Task Delete(int id);
 		IEnumerable<Person> GetAll();
+		int Count();
 	}
 }

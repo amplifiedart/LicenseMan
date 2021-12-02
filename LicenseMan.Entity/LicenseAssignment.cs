@@ -12,11 +12,11 @@ namespace LicenseMan.LicenseEntity
 
 		public int? CustodianPersonId { get; set; }
         [ForeignKey("CustodianPersonId")]
-        public Person Custodian { get; set; }
+        public Person? Custodian { get; set; }
 
-        public int? LicenseId { get; set; }
-        [ForeignKey("LicenseId")]
-		public LicenseItem License { get; set; }
+        public int? LicenseItemId { get; set; }
+        [ForeignKey("LicenseItemId")]
+		public LicenseItem? License { get; set; }
 
 		public DateTime StartDate { get; set; }
 		public DateTime DateReturned { get; set; }

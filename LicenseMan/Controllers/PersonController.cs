@@ -81,9 +81,9 @@ namespace LicenseMan.Controllers
 					return NotFound();
 
 
-				person.Name = model.Name,
-				person.Role = model.Role,
-				person.Department = model.Department
+				person.Name = model.Name;
+				person.Role = model.Role;
+				person.Department = model.Department;
 
 				await personService.UpdateAsync(person);
 				return RedirectToAction(nameof(Index));
@@ -121,6 +121,8 @@ namespace LicenseMan.Controllers
 				Id = person.Id,
 				Name = person.Name
 			};
+
+			return View(model);
 		}
 
 		[HttpPost]

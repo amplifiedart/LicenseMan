@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LicenseMan.Persistence.Migrations
 {
-    public partial class LicenseMan : Migration
+    public partial class Version010 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -82,7 +82,7 @@ namespace LicenseMan.Persistence.Migrations
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     ContractNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,8 +203,8 @@ namespace LicenseMan.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LicenseContractId = table.Column<int>(type: "int", nullable: false),
-                    VendorContactId = table.Column<int>(type: "int", nullable: false)
+                    LicenseContractId = table.Column<int>(type: "int", nullable: true),
+                    VendorContactId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -214,15 +214,13 @@ namespace LicenseMan.Persistence.Migrations
                         column: x => x.VendorContactId,
                         principalSchema: "General",
                         principalTable: "Contact",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_LicenseCollection_LicenseContract_LicenseContractId",
                         column: x => x.LicenseContractId,
                         principalSchema: "Collector",
                         principalTable: "LicenseContract",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -233,7 +231,7 @@ namespace LicenseMan.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ManufacturerContactId = table.Column<int>(type: "int", nullable: false),
+                    ManufacturerContactId = table.Column<int>(type: "int", nullable: true),
                     ManufacturerReference = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LicenseCollectionId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -245,8 +243,7 @@ namespace LicenseMan.Persistence.Migrations
                         column: x => x.ManufacturerContactId,
                         principalSchema: "General",
                         principalTable: "Contact",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_LicensePackage_LicenseCollection_LicenseCollectionId",
                         column: x => x.LicenseCollectionId,
@@ -267,7 +264,7 @@ namespace LicenseMan.Persistence.Migrations
                     LicenseFileUrl = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     LicenseAmount = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LicensePackageId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -291,7 +288,7 @@ namespace LicenseMan.Persistence.Migrations
                     AddressType = table.Column<int>(type: "int", nullable: false),
                     AddressLabel = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     AddressValue = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    PersonId = table.Column<int>(type: "int", nullable: false)
+                    PersonId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -307,8 +304,8 @@ namespace LicenseMan.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Abbreviation = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    DepartmentHeadPersonId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentDeputyPersonId = table.Column<int>(type: "int", nullable: false)
+                    DepartmentHeadPersonId = table.Column<int>(type: "int", nullable: true),
+                    DepartmentDeputyPersonId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -324,8 +321,8 @@ namespace LicenseMan.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    ContactId = table.Column<int>(type: "int", nullable: true)
+                    DepartmentId = table.Column<int>(type: "int", nullable: true),
+                    ContactId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -335,14 +332,14 @@ namespace LicenseMan.Persistence.Migrations
                         column: x => x.ContactId,
                         principalSchema: "General",
                         principalTable: "Contact",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Person_Department_DepartmentId",
                         column: x => x.DepartmentId,
                         principalSchema: "General",
                         principalTable: "Department",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -353,7 +350,7 @@ namespace LicenseMan.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustodianPersonId = table.Column<int>(type: "int", nullable: true),
-                    LicenseId = table.Column<int>(type: "int", nullable: false),
+                    LicenseItemId = table.Column<int>(type: "int", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateReturned = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -362,12 +359,11 @@ namespace LicenseMan.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_LicenseAssignment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LicenseAssignment_LicenseItem_LicenseId",
-                        column: x => x.LicenseId,
+                        name: "FK_LicenseAssignment_LicenseItem_LicenseItemId",
+                        column: x => x.LicenseItemId,
                         principalSchema: "Collector",
                         principalTable: "LicenseItem",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_LicenseAssignment_Person_CustodianPersonId",
                         column: x => x.CustodianPersonId,
@@ -440,10 +436,10 @@ namespace LicenseMan.Persistence.Migrations
                 column: "CustodianPersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LicenseAssignment_LicenseId",
+                name: "IX_LicenseAssignment_LicenseItemId",
                 schema: "Collector",
                 table: "LicenseAssignment",
-                column: "LicenseId");
+                column: "LicenseItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LicenseCollection_LicenseContractId",
@@ -494,8 +490,7 @@ namespace LicenseMan.Persistence.Migrations
                 column: "PersonId",
                 principalSchema: "General",
                 principalTable: "Person",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Department_Person_DepartmentDeputyPersonId",

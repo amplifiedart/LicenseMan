@@ -44,7 +44,6 @@ namespace LicenseMan.Persistence.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<int?>("PersonId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -106,11 +105,9 @@ namespace LicenseMan.Persistence.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<int?>("DepartmentDeputyPersonId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("DepartmentHeadPersonId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -136,9 +133,10 @@ namespace LicenseMan.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("ContactId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -177,8 +175,7 @@ namespace LicenseMan.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LicenseId")
-                        .IsRequired()
+                    b.Property<int?>("LicenseItemId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -188,7 +185,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasIndex("CustodianPersonId");
 
-                    b.HasIndex("LicenseId");
+                    b.HasIndex("LicenseItemId");
 
                     b.ToTable("LicenseAssignment", "Collector");
                 });
@@ -201,7 +198,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("LicenseContractId")
+                    b.Property<int?>("LicenseContractId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -209,7 +206,7 @@ namespace LicenseMan.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("VendorContactId")
+                    b.Property<int?>("VendorContactId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -234,7 +231,7 @@ namespace LicenseMan.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("ExpiryDate")
+                    b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -258,7 +255,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("ExpiryDate")
+                    b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LicenseAmount")
@@ -303,7 +300,7 @@ namespace LicenseMan.Persistence.Migrations
                     b.Property<int?>("LicenseCollectionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ManufacturerContactId")
+                    b.Property<int?>("ManufacturerContactId")
                         .HasColumnType("int");
 
                     b.Property<string>("ManufacturerReference")
@@ -531,9 +528,7 @@ namespace LicenseMan.Persistence.Migrations
                 {
                     b.HasOne("LicenseMan.GeneralEntity.Person", "Person")
                         .WithMany("Addresses")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PersonId");
 
                     b.Navigation("Person");
                 });
@@ -543,14 +538,12 @@ namespace LicenseMan.Persistence.Migrations
                     b.HasOne("LicenseMan.GeneralEntity.Person", "DepartmentDeputy")
                         .WithMany("DepartmentDeputies")
                         .HasForeignKey("DepartmentDeputyPersonId")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("LicenseMan.GeneralEntity.Person", "DepartmentHead")
                         .WithMany("DepartmentHeads")
                         .HasForeignKey("DepartmentHeadPersonId")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.Navigation("DepartmentDeputy");
 
@@ -559,15 +552,17 @@ namespace LicenseMan.Persistence.Migrations
 
             modelBuilder.Entity("LicenseMan.GeneralEntity.Person", b =>
                 {
-                    b.HasOne("LicenseMan.GeneralEntity.Contact", null)
+                    b.HasOne("LicenseMan.GeneralEntity.Contact", "Contact")
                         .WithMany("Persons")
-                        .HasForeignKey("ContactId");
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LicenseMan.GeneralEntity.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Contact");
 
                     b.Navigation("Department");
                 });
@@ -580,9 +575,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasOne("LicenseMan.LicenseEntity.LicenseItem", "License")
                         .WithMany("LicenseAssignments")
-                        .HasForeignKey("LicenseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LicenseItemId");
 
                     b.Navigation("Custodian");
 
@@ -593,15 +586,11 @@ namespace LicenseMan.Persistence.Migrations
                 {
                     b.HasOne("LicenseMan.LicenseEntity.LicenseContract", "Contract")
                         .WithMany()
-                        .HasForeignKey("LicenseContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LicenseContractId");
 
                     b.HasOne("LicenseMan.GeneralEntity.Contact", "Vendor")
                         .WithMany()
-                        .HasForeignKey("VendorContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VendorContactId");
 
                     b.Navigation("Contract");
 
@@ -623,9 +612,7 @@ namespace LicenseMan.Persistence.Migrations
 
                     b.HasOne("LicenseMan.GeneralEntity.Contact", "ManufacturerContact")
                         .WithMany()
-                        .HasForeignKey("ManufacturerContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ManufacturerContactId");
 
                     b.Navigation("ManufacturerContact");
                 });

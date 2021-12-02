@@ -12,6 +12,12 @@ namespace LicenseMan.Services.Service
 			this.context = context;
 		}
 
+		public int Count()
+		{
+			var persons = GetAll();
+			return persons == null ? 0 : persons.Count();
+		}
+
 		public async Task CreateAsync(Person newPerson)
 		{
 			await context.Persons.AddAsync(newPerson);

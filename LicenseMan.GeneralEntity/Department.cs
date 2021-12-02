@@ -16,12 +16,11 @@ namespace LicenseMan.GeneralEntity
 		public string Abbreviation { get; set; }
 
 		public int? DepartmentHeadPersonId { get; set; }
-
 		[ForeignKey("DepartmentHeadPersonId")]
-		public Person DepartmentHead { get; set; }
+		public Person? DepartmentHead { get; set; }
 
 		public int? DepartmentDeputyPersonId { get; set; }
 		[ForeignKey("DepartmentDeputyPersonId")]
-		public Person DepartmentDeputy { get; set; }
+		public Person? DepartmentDeputy { get; set; }
 	}
 }

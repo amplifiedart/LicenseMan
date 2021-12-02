@@ -13,10 +13,9 @@ namespace LicenseMan.LicenseEntity
         [Required, MaxLength(50)]
         public string Name { get; set; }
 
-        public int ManufacturerContactId { get; set; }
-
+        public int? ManufacturerContactId { get; set; }
         [ForeignKey("ManufacturerContactId")]
-        public Contact ManufacturerContact { get; set; }
+        public Contact? ManufacturerContact { get; set; }
 
         [MaxLength(100)]
         public string ManufacturerReference { get; set; }

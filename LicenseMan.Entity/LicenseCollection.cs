@@ -18,15 +18,13 @@ namespace LicenseMan.LicenseEntity
         public string Name { get; set; } = string.Empty;
 
 
-        public int LicenseContractId { get; set; }
-
+        public int? LicenseContractId { get; set; }
         [ForeignKey("LicenseContractId")]
         public LicenseContract? Contract { get; set; }
 
         public IEnumerable<LicensePackage> LicensePackages{ get; set;}
 
-        public int VendorContactId { get; set; }
-
+        public int? VendorContactId { get; set; }
         [ForeignKey("VendorContactId")]
         public Contact? Vendor { get; set; }
 	}

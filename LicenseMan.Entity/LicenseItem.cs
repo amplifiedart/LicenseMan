@@ -22,7 +22,7 @@ namespace LicenseMan.LicenseEntity
 
 		public DateTime StartDate { get; set; }
         
-		public DateTime ExpiryDate { get; set; }
+		public DateTime? ExpiryDate { get; set; }
 
 		public IEnumerable<LicenseAssignment> LicenseAssignments { get; set; }
     }
